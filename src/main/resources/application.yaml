@@ -1,0 +1,34 @@
+spring:
+  application.name: Spring-AI-DMR
+  ai:
+    # Disable Azure OpenAI since we're using Docker Model Runner
+    model:
+      chat: openai
+      embedding: openai
+      audio:
+        transcription: ~
+      image: ~
+
+
+debug: true
+
+#DB configuration
+database:
+  name: AI_DMR
+ai:
+  baseUrl: "http://54.221.153.149/v1"
+  databaseName: AI_DMR
+  modelName: "ai/gpt-oss:20B"
+  apiKey: docker
+  temperature: 0.4
+  topP: 0.9
+  maxTokens: 2048
+  vectorStore:
+    collectionName: vector_store
+    indexName: vector_index
+    pathName: embedding
+    metadata:
+    - source
+    - document_id
+
+
