@@ -34,9 +34,9 @@ public class VectorDocumentServiceImpl implements VectorDocumentService {
                 .query(query)
                 .build();
         List<Document> documents = vectorStore.similaritySearch(searchRequest);
-        if(CollectionUtils.isEmpty(documents)) {
+       /* if(CollectionUtils.isEmpty(documents)) {
             documents.add(new Document("This query is out of box."));
-        }
+        }*/
         return documents;
     }
 }
