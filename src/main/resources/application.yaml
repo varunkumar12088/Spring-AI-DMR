@@ -4,7 +4,7 @@ spring:
 
   ai:
     openai:
-      base-url: http://15.206.179.230
+      base-url: http://35.154.117.24
       api-key: dummy-key
 
       embedding:
@@ -13,20 +13,17 @@ spring:
 
     vectorstore:
       mongodb:
-        collection-name: vector_store
+        collection-name: vector_documents
         path-name: embedding
         index-name: vector_index
-        initialize-schema: false
+        initialize-schema: true
 
 logging:
   level:
     org.springframework.ai.autoconfigure: DEBUG
 
-database:
-  name: AI_DMR
-
 ai:
   databaseName: AI_DMR
-  modelName: smollm2
+  modelName: "gpt-oss:20B"
   temperature: 0.7
   topP: 0.3

@@ -6,6 +6,7 @@ import org.springframework.ai.document.Document;
 import org.springframework.ai.vectorstore.SearchRequest;
 import org.springframework.ai.vectorstore.VectorStore;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import java.util.List;
 
@@ -29,9 +30,13 @@ public class VectorDocumentServiceImpl implements VectorDocumentService {
     public List<Document> search(String query) {
         SearchRequest searchRequest = SearchRequest.builder()
                 .similarityThreshold(0.5)
-                .topK(3)
+                .topK(5)
                 .query(query)
                 .build();
-        return vectorStore.similaritySearch(searchRequest);
+        List<Document> documents = vectorStore.similaritySearch(searchRequest);
+        if(CollectionUtils.isEmpty(documents)) {
+            documents.add(new Document("This query is out of box."));
+        }
+        return documents;
     }
 }

@@ -1,6 +1,6 @@
 package com.learning.ai.controller;
 
-import com.learning.ai.helper.DataHelper;
+import com.learning.ai.helper.Helper;
 import com.learning.ai.service.VectorDocumentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,7 +16,7 @@ public class VectorDocumentController {
 
     @GetMapping("/java")
     public String storeJavaConcept(){
-        vectorDocumentService.addDocuments(DataHelper.getJavaConcepts());
+        vectorDocumentService.addDocuments(Helper.getJavaConcepts());
         return "Done";
     }
 

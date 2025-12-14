@@ -3,7 +3,33 @@ package com.learning.ai.helper;
 import java.util.Arrays;
 import java.util.List;
 
-public class DataHelper {
+public class Helper {
+
+    public static String systemMessage(String context) {
+        return """
+                You are a coding assistant.
+                
+                First, check whether DOCUMENTS contain the answer.
+                If yes, answer strictly from DOCUMENTS.
+                If no, reply EXACTLY with:
+                "This query is out of box."
+                
+                Do not use any information outside DOCUMENTS.
+                
+                DOCUMENTS:
+                {context}
+                
+                """.replace("{context}", context);
+    }
+
+    public static String userMessage(String query) {
+        return """
+                User Question:
+                {query}
+                """.replace("{query}", query);
+    }
+
+
 
     public static List<String> getJavaConcepts(){
         return Arrays.asList(

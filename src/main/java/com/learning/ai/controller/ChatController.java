@@ -5,6 +5,7 @@ import com.learning.ai.service.ChatService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -20,6 +21,11 @@ public class ChatController {
         ChatRequest chatMessage = new ChatRequest();
         chatMessage.setMessage(message);
         return chatService.chat(chatMessage);
+    }
+
+    @GetMapping(value = "/q")
+    public String chat(@RequestParam(name = "q") String question){
+        return chatService.chat(question);
     }
 
 }
