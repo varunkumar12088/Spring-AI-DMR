@@ -1,27 +1,24 @@
 package com.learning.ai.model;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.time.Instant;
-import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Map;
 
+@Document(collation = "vector_documents")
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
-@Builder
-@Document(collection = "chat_messages")
-public class ChatMessage {
+@NoArgsConstructor
+public class VectorDocuments {
 
     @Id
     private String id;
-    private String conversationId;
-    private String userId;
-    private String role; // "user" or "assistant"
     private String content;
-    private Instant timestamp;
+    private List<Double> embeddings;
+    private Map<String, Object> metadata;
+
 }

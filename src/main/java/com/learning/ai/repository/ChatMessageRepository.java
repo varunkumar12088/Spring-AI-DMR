@@ -9,7 +9,6 @@ import java.util.List;
 @Repository
 public interface ChatMessageRepository extends MongoRepository<ChatMessage, String> {
 
-    List<ChatMessage> findByConversationId(String conversationId);
+    List<ChatMessage>  findByConversationIdOrderByTimestampDesc(String conversationId);
 
-    void deleteByConversationId(String conversationId);
 }

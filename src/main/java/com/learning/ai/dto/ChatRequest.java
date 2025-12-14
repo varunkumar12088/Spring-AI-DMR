@@ -8,4 +8,6 @@ import lombok.Setter;
 public class ChatRequest {
 
     private String message;
+    private String conversationId;
+    private String userId;
 }
