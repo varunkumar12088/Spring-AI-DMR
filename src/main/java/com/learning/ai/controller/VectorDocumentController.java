@@ -20,4 +20,16 @@ public class VectorDocumentController {
         return "Done";
     }
 
+    @GetMapping("/json")
+    public String addDocumentsFromJson(){
+        vectorDocumentService.addDocumentsFromJson();
+        return "Done";
+    }
+
+    @GetMapping("/pdf")
+    public String addDocumentsFromPdf(){
+        vectorDocumentService.addDocumentsFromPdf();
+        return "Done";
+    }
+
 }

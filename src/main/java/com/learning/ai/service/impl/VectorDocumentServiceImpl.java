@@ -1,5 +1,7 @@
 package com.learning.ai.service.impl;
 
+import com.learning.ai.service.DataLoaderService;
+import com.learning.ai.service.DataTransformerService;
 import com.learning.ai.service.VectorDocumentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.ai.document.Document;
@@ -15,7 +17,8 @@ import java.util.List;
 public class VectorDocumentServiceImpl implements VectorDocumentService {
 
     private final VectorStore vectorStore;
-
+    private final DataLoaderService  dataLoaderService;
+    private final DataTransformerService dataTransformerService;
 
     @Override
     public void addDocuments(List<String> texts) {
@@ -24,6 +27,20 @@ public class VectorDocumentServiceImpl implements VectorDocumentService {
                 .toList();
 
         vectorStore.add(documents);
+    }
+
+    @Override
+    public void addDocumentsFromJson() {
+        List<Document> documents = dataLoaderService.loadDocumentsFromJson();
+        List<Document> documentList = dataTransformerService.transform(documents);
+        vectorStore.add(documentList);
+    }
+
+    @Override
+    public void addDocumentsFromPdf() {
+        List<Document> documents = dataLoaderService.loadDocumentsFromPdf();
+        List<Document> documentList = dataTransformerService.transform(documents);
+        vectorStore.add(documentList);
     }
 
     @Override

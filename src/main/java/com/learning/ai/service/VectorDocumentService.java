@@ -8,5 +8,9 @@ public interface VectorDocumentService {
 
     void addDocuments(List<String> texts);
 
+    void addDocumentsFromJson();
+
+    void addDocumentsFromPdf();
+
     List<Document> search(String query);
 }
