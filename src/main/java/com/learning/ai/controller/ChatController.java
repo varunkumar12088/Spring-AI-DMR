@@ -23,9 +23,23 @@ public class ChatController {
         return chatService.chat(chatMessage);
     }
 
-    @GetMapping(value = "/q")
+    @GetMapping(value = "/question")
     public String chat(@RequestParam(name = "q") String question){
         return chatService.chat(question);
+    }
+
+    @GetMapping(value = "/question-answer")
+    public String chatQuestionAnswer(@RequestParam(name = "q") String question){
+        ChatRequest chatMessage = new ChatRequest();
+        chatMessage.setMessage(question);
+        return chatService.chatQuestionAnswer(chatMessage);
+    }
+
+    @GetMapping(value = "/question/rag-pipeline")
+    public String chatRagPipeline(@RequestParam(name = "q") String question){
+        ChatRequest chatMessage = new ChatRequest();
+        chatMessage.setMessage(question);
+        return chatService.chatRagPipeline(chatMessage);
     }
 
 }

@@ -10,10 +10,21 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.SimpleLoggerAdvisor;
+import org.springframework.ai.chat.client.advisor.api.Advisor;
+import org.springframework.ai.chat.client.advisor.vectorstore.QuestionAnswerAdvisor;
 import org.springframework.ai.chat.messages.Message;
 import org.springframework.ai.chat.messages.UserMessage;
 import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.ai.document.Document;
+import org.springframework.ai.rag.advisor.RetrievalAugmentationAdvisor;
+import org.springframework.ai.rag.generation.augmentation.ContextualQueryAugmenter;
+import org.springframework.ai.rag.preretrieval.query.expansion.MultiQueryExpander;
+import org.springframework.ai.rag.preretrieval.query.transformation.RewriteQueryTransformer;
+import org.springframework.ai.rag.preretrieval.query.transformation.TranslationQueryTransformer;
+import org.springframework.ai.rag.retrieval.join.ConcatenationDocumentJoiner;
+import org.springframework.ai.rag.retrieval.search.VectorStoreDocumentRetriever;
+import org.springframework.ai.vectorstore.SearchRequest;
+import org.springframework.ai.vectorstore.VectorStore;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -29,6 +40,7 @@ public class ChatServiceImpl implements ChatService {
     private final ChatClient chatClient;
     private final ChatMessageRepository chatMessageRepository;
     private final VectorDocumentService  vectorDocumentService;
+    private final VectorStore vectorStore;
 
     @Override
     public String chat(String message) {
@@ -53,6 +65,57 @@ public class ChatServiceImpl implements ChatService {
         messages.add(new UserMessage(chatRequest.getMessage()));
         Prompt prompt = new Prompt(messages);
         String response = chatClient.prompt(prompt).call().content();
+        return response;
+    }
+
+    @Override
+    public String chatQuestionAnswer(ChatRequest chatRequest) {
+        log.info("message question answer: {}",chatRequest.getMessage());
+        String response = this.chatClient.prompt()
+                .advisors(new SimpleLoggerAdvisor(), QuestionAnswerAdvisor.builder(vectorStore)
+                        .searchRequest(SearchRequest.builder()
+                                .topK(5)
+                                .similarityThreshold(0.5)
+                                .build())
+                        .build())
+                .user(chatRequest.getMessage())
+                .call()
+                .content();
+        return response;
+    }
+
+    @Override
+    public String chatRagPipeline(ChatRequest chatRequest) {
+        Advisor  advisor = RetrievalAugmentationAdvisor.builder()
+                .queryTransformers(
+                        RewriteQueryTransformer.builder()
+                                .chatClientBuilder(chatClient.mutate().clone())
+                                .build(),
+                        TranslationQueryTransformer.builder()
+                                .chatClientBuilder(chatClient.mutate().clone())
+                                .targetLanguage("english")
+                                .build()
+                )
+                .queryExpander(MultiQueryExpander.builder()
+                        .chatClientBuilder(chatClient.mutate().clone())
+                        .numberOfQueries(3)
+                        .build()
+                )
+                .documentRetriever(VectorStoreDocumentRetriever.builder()
+                        .vectorStore(vectorStore)
+                        .topK(5)
+                        .similarityThreshold(0.5)
+                        .build())
+                .documentJoiner(new ConcatenationDocumentJoiner())
+                .queryAugmenter(ContextualQueryAugmenter.builder().build())
+                //.documentPostProcessors()
+                .build();
+
+        String response = chatClient.prompt()
+                .advisors(new SimpleLoggerAdvisor(), advisor)
+                .user(chatRequest.getMessage())
+                .call()
+                .content();
         return response;
     }
 

@@ -4,7 +4,7 @@ spring:
 
   ai:
     openai:
-      base-url: http://35.154.117.24
+      base-url: http://3.110.108.164
       api-key: dummy-key
 
       embedding:
