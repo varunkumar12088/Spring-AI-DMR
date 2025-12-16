@@ -31,3 +31,6 @@ ai:
   temperature: 0.7
   topP: 0.3
   maxTokens: 200
+  weather:
+    apiKey: ${WEATHER-API-KEY}
+    baseUrl: "http://api.weatherapi.com/v1"

@@ -2,6 +2,7 @@ package com.learning.ai.config;
 
 import com.learning.ai.properties.AIProperties;
 import com.learning.ai.tools.SimpleDateTimeTool;
+import com.learning.ai.tools.WeatherTool;
 import com.learning.ai.util.LogUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.ai.chat.client.ChatClient;
@@ -14,6 +15,7 @@ import org.springframework.ai.vectorstore.SearchRequest;
 import org.springframework.ai.vectorstore.VectorStore;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.client.RestClient;
 
 import java.util.List;
 
@@ -23,6 +25,7 @@ public class AIConfig {
 
     private final ChatModel chatModel;
     private final AIProperties  aiProperties;
+    private final WeatherTool  weatherTool;
 
     @Bean
     public ChatClient chatClient() {
@@ -36,7 +39,8 @@ public class AIConfig {
                         .topP(aiProperties.topP())
                         .maxTokens(aiProperties.maxTokens())
                         .build())
-                .defaultTools(new SimpleDateTimeTool())
+                .defaultTools(new SimpleDateTimeTool(), weatherTool)
                 .build();
     }
+
 }

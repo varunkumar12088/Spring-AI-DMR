@@ -13,13 +13,18 @@ public record AIProperties(
         Double temperature,
         Double topP,
         Integer maxTokens,
-        VectorStore vectorStore
+        VectorStore vectorStore,
+        Weather weather
 ) {
     public record VectorStore(
             String collectionName,
             String indexName,
             String pathName,
             List<String> metadata
-    ){
-    }
+    ){ }
+
+    public record Weather(
+            String apiKey,
+            String baseUrl
+    ){}
 }
