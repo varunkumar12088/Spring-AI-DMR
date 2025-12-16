@@ -42,4 +42,11 @@ public class ChatController {
         return chatService.chatRagPipeline(chatMessage);
     }
 
+    @GetMapping(value = "/question-tool")
+    public String chatTool(@RequestParam(name = "q") String question){
+        ChatRequest chatMessage = new ChatRequest();
+        chatMessage.setMessage(question);
+        return chatService.chatTool(chatMessage);
+    }
+
 }

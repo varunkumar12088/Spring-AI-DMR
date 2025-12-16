@@ -8,6 +8,7 @@ import com.learning.ai.service.ChatService;
 import com.learning.ai.service.VectorDocumentService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.poi.hslf.record.Sound;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.SimpleLoggerAdvisor;
 import org.springframework.ai.chat.client.advisor.api.Advisor;
@@ -116,6 +117,17 @@ public class ChatServiceImpl implements ChatService {
                 .user(chatRequest.getMessage())
                 .call()
                 .content();
+        return response;
+    }
+
+    @Override
+    public String chatTool(ChatRequest chatRequest) {
+        System.out.println("Calling chat tools");
+        String response = chatClient
+                .prompt(chatRequest.getMessage())
+                .call()
+                .content();
+        System.out.println("Response from chat tools: " + response);
         return response;
     }
 

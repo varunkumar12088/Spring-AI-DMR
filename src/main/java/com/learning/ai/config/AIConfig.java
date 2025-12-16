@@ -1,6 +1,8 @@
 package com.learning.ai.config;
 
 import com.learning.ai.properties.AIProperties;
+import com.learning.ai.tools.SimpleDateTimeTool;
+import com.learning.ai.util.LogUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.SafeGuardAdvisor;
@@ -24,6 +26,7 @@ public class AIConfig {
 
     @Bean
     public ChatClient chatClient() {
+        LogUtil.log(this.aiProperties);
         return ChatClient.builder(chatModel)
                 .defaultAdvisors(new SimpleLoggerAdvisor(),
                         new SafeGuardAdvisor(List.of("games")))
@@ -31,7 +34,9 @@ public class AIConfig {
                         .model(aiProperties.modelName())
                         .temperature(aiProperties.temperature())
                         .topP(aiProperties.topP())
+                        .maxTokens(aiProperties.maxTokens())
                         .build())
+                .defaultTools(new SimpleDateTimeTool())
                 .build();
     }
 }

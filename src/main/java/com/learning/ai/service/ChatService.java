@@ -11,4 +11,6 @@ public interface ChatService {
     String chatQuestionAnswer(ChatRequest chatRequest);
 
     String chatRagPipeline(ChatRequest chatRequest);
+
+    String chatTool(ChatRequest chatRequest);
 }
